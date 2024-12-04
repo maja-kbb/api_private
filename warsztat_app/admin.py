@@ -3,8 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from .models import User, Osoba, Stanowisko
 
-admin.site.register(User)
-admin.site.register(Stanowisko)
+
 
 
 class OsobaAdmin(admin.ModelAdmin):
@@ -26,3 +25,5 @@ class StanowiskoAdmin(admin.ModelAdmin):
     list_filter = ('nazwa',)  # Filtr po nazwie stanowiska
 
 admin.site.register(Osoba, OsobaAdmin)
+admin.site.register(User)
+admin.site.register(Stanowisko)

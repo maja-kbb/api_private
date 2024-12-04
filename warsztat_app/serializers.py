@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from .models import Osoba, Stanowisko, User
+from datetime import date
 
 class OsobaSerializer(serializers.Serializer):
     imie = serializers.CharField(max_length = 50)# pole tekstowe
     nazwisko = serializers.CharField(max_length = 50)# pole tekstowe 
     stanowisko = serializers.PrimaryKeyRelatedField(queryset = Stanowisko.objects.all(), allow_null=True) 
-    data_dodania = serializers.DateField(read_only = True)
+    data_dodania = serializers.DateField()
     plec = serializers.ChoiceField(choices=Osoba.Plec.choices)
 
     def create(self, validated_data):
@@ -19,6 +20,21 @@ class OsobaSerializer(serializers.Serializer):
         instance.plec = validated_data.get('plec', instance.plec)
         instance.save()
         return instance
+    
+
+    def validate_imie(self, value):
+        if not value.isalpha():
+            raise serializers.ValidationError("Pole 'imie' moze zawierac tylko litery")
+        return value
+    
+    def validate_nazwisko(self, value):
+        if not value.isalpha():
+            raise serializers.ValidationError("Pole 'nazwisko' moze zawierac tylko litery")
+        return value
+    
+    def validate_data_dodania(self, value):
+        if value > date.today():
+            raise serializers.ValidationError("Data dodania nie moze byc z przyszłosci ")
     
 
 class UserModelSerializer(serializers.ModelSerializer):

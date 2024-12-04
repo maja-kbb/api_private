@@ -1,4 +1,8 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.utils.timezone import now  
+import datetime
+import re
 
 # Create your models here.
 class User(models.Model):
@@ -19,13 +23,21 @@ class Osoba(models.Model):
     imie = models.CharField(max_length = 50)  # pole tekstowe
     nazwisko = models.CharField(max_length = 50)# pole tekstowe 
     stanowisko = models.ForeignKey(Stanowisko, on_delete = models.SET_NULL, null=True) 
-    data_dodania = models.DateField(auto_now_add = True)
+    data_dodania = models.DateField(default = datetime.date.today)
 
     class Plec(models.IntegerChoices):
         KOBIETA = 1
         MEZCZYZNA = 2
         INNA = 3
     plec = models.IntegerField(choices = Plec.choices)
+
+
+
+    def __str__(self):
+        return f"{self.imie} {self.nazwisko}"
+
+
+
 
     class Meta:
         ordering = ["nazwisko"]

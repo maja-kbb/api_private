@@ -35,7 +35,7 @@ class OsobaSerializer(serializers.Serializer):
     def validate_data_dodania(self, value):
         if value > date.today():
             raise serializers.ValidationError("Data dodania nie moze byc z przyszłosci ")
-    
+        return value
 
 class UserModelSerializer(serializers.ModelSerializer):
     class Meta:

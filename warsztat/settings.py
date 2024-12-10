@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'warsztat_app.apps.WarsztatAppConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     'admin_tools',              
     'admin_tools.theming',
     'admin_tools.menu',

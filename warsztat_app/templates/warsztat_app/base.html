@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        {% load static %}
+        <link href="{% static "css/warsztat_app.css" %}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="header" >
+            <h1>Ja dzownię w sprawie pumy</h1>
+        </div>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div id="sidebar">
+            <p>Panel boczny</p>
+        </div>
+    </body>
+</html>

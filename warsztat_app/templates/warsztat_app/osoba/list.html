@@ -1,0 +1,14 @@
+{% extends "warsztat_app/base.html" %}
+
+{% block title %}Lista obiektów Osoba{% endblock %}
+
+{% block content %}
+
+Aktualnie w mojej bazie dodane są poniższe obiekty Osoba.
+{% for osoba in osoby %}
+<p>Osoba: {{ osoba.imie }} {{ osoba.nazwisko }}</p>
+<p>Stanowisko: {{ osoba.stanowisko }}</p>
+<p>Data dodania: {{ osoba.data_dodania }}</p>
+<hr>
+{% endfor %}
+{% endblock %}

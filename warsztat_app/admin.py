@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import User, Osoba, Stanowisko
+from .models import Osoba, Stanowisko
 
 
 
@@ -25,5 +25,4 @@ class StanowiskoAdmin(admin.ModelAdmin):
     list_filter = ('nazwa',)  # Filtr po nazwie stanowiska
 
 admin.site.register(Osoba, OsobaAdmin)
-admin.site.register(User)
 admin.site.register(Stanowisko)

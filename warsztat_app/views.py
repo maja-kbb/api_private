@@ -41,10 +41,10 @@ def osoba_detail(request, pk):
         return Response(serializer.data)
     
 
-@api_view(['PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
+@api_view(['PUT'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
-def osoba_update_delete(request, pk):
+def osoba_update(request, pk):
 
     """
     :param request: obiekt DRF Request
@@ -63,7 +63,17 @@ def osoba_update_delete(request, pk):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+   
+@api_view(['DELETE'])    
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def osoba_delete(request, pk):
+    try:
+        osoba = Osoba.objects.get(pk=pk)
+    except Osoba.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'DELETE':
         osoba.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -133,3 +143,18 @@ def osoba_detail_html(request, id):
     return render(request,
                   "warsztat_app/osoba/detail.html",
                   {'osoba': osoba})
+
+
+class StanowiskoMemberView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            stanowisko = Stanowisko.objects.get(pk=pk)
+        except Stanowisko.DoesNotExist:
+            return Response(status = status.HTTP_404_NOT_FOUND)
+        
+        osoby = Osoba.objects.filter(stanowisko = stanowisko)
+        serializer = OsobaSerializer(osoby, many = True)
+        return Response(serializer.data)

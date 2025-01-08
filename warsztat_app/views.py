@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
 import datetime
@@ -17,7 +19,10 @@ from .serializers import OsobaSerializer, StanowiskoModelSerializer
 @permission_classes([IsAuthenticated])
 def osoba_list(request):
     if request.method == 'GET':
-        osoby = Osoba.objects.filter(wlasciciel=request.user)
+        if not request.user.has_perm('warsztat_app.view_other_person'):
+            osoby = Osoba.objects.filter(wlasciciel=request.user)
+        else:
+            osoby = Osoba.objects.all()
         serializer = OsobaSerializer(osoby, many=True)
         return Response(serializer.data)
 
@@ -34,12 +39,12 @@ def osoba_list(request):
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
+@permission_required('warsztat_app.view_osoba')
 def osoba_detail(request, pk):
-    if request.method == 'GET':
-        osoba = get_object_or_404(Osoba, pk=pk)
-        serializer = OsobaSerializer(osoba)
-        return Response(serializer.data)
-    
+    try:
+        osoba = Osoba.objects.get(pk=pk)
+    except Osoba.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
 @authentication_classes([SessionAuthentication, BasicAuthentication])

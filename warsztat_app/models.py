@@ -40,5 +40,9 @@ class Osoba(models.Model):
     class Meta:
         ordering = ["nazwisko"]
         verbose_name_plural = "Osoby"
+        permissions = [
+            ("view_other_person", "Moze zobaczyc osoby innych włascicieli"),
+            
+        ]
     def __str__(self):
         return f"{self.imie} {self.nazwisko}"

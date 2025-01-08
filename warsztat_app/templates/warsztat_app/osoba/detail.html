@@ -6,4 +6,12 @@
 <p>Osoba: {{ osoba.imie }} {{ osoba.nazwisko }}</p>
 <p>Stanowisko: {{ osoba.stanowisko }}</p>
 <p>Data dodania: {{ osoba.data_dodania }}</p>
+
+
+
+{% if perms.warsztat_app.delete_osoba %}
+  <button>Delete</button>
+{% else %}
+  <p>Nie masz uprawnień do usunięcia osoby.</p>
+{% endif %}
 {% endblock %}

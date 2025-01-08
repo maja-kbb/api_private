@@ -3,6 +3,7 @@ from .models import Osoba, Stanowisko, User
 from datetime import date
 
 class OsobaSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     imie = serializers.CharField(max_length = 50)# pole tekstowe
     nazwisko = serializers.CharField(max_length = 50)# pole tekstowe 
     stanowisko = serializers.PrimaryKeyRelatedField(queryset = Stanowisko.objects.all(), allow_null=True) 
@@ -45,4 +46,4 @@ class UserModelSerializer(serializers.ModelSerializer):
 class StanowiskoModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stanowisko
-        fields = ['nazwa','opis']
+        fields = ['id', 'nazwa','opis']

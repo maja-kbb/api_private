@@ -5,13 +5,24 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
 import datetime
 from .models import Osoba, Stanowisko
+from .permissions import CustomDjangoModelPermissions
 from .serializers import OsobaSerializer, StanowiskoModelSerializer
+from django.contrib.auth import logout
+
+
+class LogoutView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        logout(request)
+        return Response({"message": "Wylogowano pomyślnie"})
 
 # Wyświetlenie listy obiektów Osoba
 @api_view(['GET', 'POST'])
@@ -37,10 +48,12 @@ def osoba_list(request):
 
 # Wyświetlenie, dodanie i usunięcie pojedynczego obiektu Osoba
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated, CustomDjangoModelPermissions])
 @permission_required('warsztat_app.view_osoba')
 def osoba_detail(request, pk):
+    #if not request.user.has_perm('warsztat_app.view_person'):
+        #raise PermissionDenied()
     try:
         osoba = Osoba.objects.get(pk=pk)
     except Osoba.DoesNotExist:
@@ -130,6 +143,9 @@ def welcome_view(request):
         </body></html>"""
     return HttpResponse(html)
 
+
+@login_required
+@permission_required('warsztat_app.view_osoba')
 def osoba_list_html(request):
     # pobieramy wszystkie obiekty Person z bazy poprzez QuerySet
     osoby = Osoba.objects.all()

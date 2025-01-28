@@ -19,10 +19,10 @@ class OsobaAdmin(admin.ModelAdmin):
     
 
 class StanowiskoAdmin(admin.ModelAdmin):
-    # Kolumny do wyświetlania w widoku listy
+  
     list_display = ('nazwa', 'opis')
-    # Filtry do wyświetlania
-    list_filter = ('nazwa',)  # Filtr po nazwie stanowiska
+    
+    list_filter = ('nazwa',) 
 
 admin.site.register(Osoba, OsobaAdmin)
 admin.site.register(Stanowisko)

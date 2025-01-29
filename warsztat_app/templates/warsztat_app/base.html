@@ -13,7 +13,7 @@
     </head>
     <body>
         <div id="header" >
-            <h1>Ja dzownię w sprawie pumy</h1>
+            <h1>Raz pod wozem raz pod wozem</h1>
         </div>
         <div id="content">
             {% block content %}
@@ -22,5 +22,8 @@
         <div id="sidebar">
             <p>Panel boczny</p>
         </div>
+        {% if perms.warsztat_app.delete_person %}
+            <button>Delete</button>
+        {% endif %}
     </body>
 </html>
